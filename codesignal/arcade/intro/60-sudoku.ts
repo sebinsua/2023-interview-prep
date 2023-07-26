@@ -7,7 +7,7 @@ function* rows(grid: number[][]): Generator<number[]> {
 function* columns(grid: number[][]): Generator<number[]> {
   const columns = grid[0].length;
   for (let columnIndex = 0; columnIndex < columns; columnIndex++) {
-    const column = [];
+    const column: number[] = [];
     for (let row of grid) {
       column.push(row[columnIndex]);
     }
@@ -38,7 +38,7 @@ function* squares<Size extends number>(
   const columns = grid[0].length;
   for (let i = 0; i <= rows - size; i += size) {
     for (let j = 0; j <= columns - size; j += size) {
-      let square = [];
+      let square: number[][] = [];
       for (let newRow = 0; newRow < size; newRow++) {
         square.push(grid[i + newRow].slice(j, j + size));
       }
