@@ -1,5 +1,6 @@
 from collections import Counter
 
+
 class Solution:
     def checkInclusion(self, s1: str, s2: str) -> bool:
         # In order to check whether there is a permutation of `s1` within `s2`

@@ -14,7 +14,7 @@ class Solution:
         # correctly sorted and we can't use a binary search in the conventional
         # way. However, we do know that the side that contains the rotation
         # will be unsorted while the side that doesn't will be sorted. This
-        # is enought for us to perform a modified binary search, which checks
+        # is enough for us to perform a modified binary search, which checks
         # if the target is within the sorted side normally, but otherwise
         # assumes it must be within the unsorted side.
         #
