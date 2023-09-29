@@ -1,0 +1,1 @@
+The companion blog post for this is [here: **“Is dismissing the algorithmic tech interview a memetic hazard?”**](https://sebinsua.com/algorithmic-bathwater#what-kind-of-problem-do-i-have). It contains a step-by-step guide to selecting the optimal technique when solving a programming problem including greedy algorithms, dynamic programming, depth-first search and backtracking.
