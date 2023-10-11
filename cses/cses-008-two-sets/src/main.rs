@@ -85,6 +85,40 @@ fn dp_solution(n: u64) -> Option<(Vec<u64>, Vec<u64>)> {
     Some((subset1, subset2))
 }
 
+fn greedy_solution(n: u64) -> Option<(Vec<u64>, Vec<u64>)> {
+    let total_sum = gauss_sum(n);
+
+    // Test if the sum of the numbers from 1 to n is odd or even.
+    // If it's odd, it will not be possible to break the sequence into two equal sets.
+    if total_sum % 2 != 0 {
+        return None;
+    }
+
+    let target_sum = total_sum / 2;
+    
+    let mut subset1 = Vec::new();
+    let mut subset2 = Vec::new();
+
+    let mut current_sum = 0;
+    for num in (1..=n).rev() {
+        // For each value in the sequence, we need to decide whether to put it in
+        // `subset1` or `subset2`, however to do this we only need to consider decisions
+        // with regards to `subset1` and can infer the decisions for `subset2` from this.
+        // 
+        // What we do is use `current_sum` to track the sum of the numbers in `subset1`
+        // and add numbers from the `sequence` into this if we know that when they are 
+        // added to the current sum they are less than or equal to the `target_sum`.
+        if current_sum + num <= target_sum {
+            current_sum += num;
+            subset1.push(num);
+        } else {
+            subset2.push(num);
+        }
+    }
+
+    Some((subset1, subset2))
+}
+
 fn main() {
     // Read input from `stdin` and parse it into a 64-bit unsigned integer.
     let n = match stdin().lines().next() {
@@ -99,7 +133,7 @@ fn main() {
         }
     };
 
-    match dp_solution(n) {
+    match greedy_solution(n) {
         Some((subset1, subset2)) => {
             println!("YES");
 
@@ -114,6 +148,4 @@ fn main() {
             return
         }
     }
-
-    
 }
