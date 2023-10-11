@@ -1,10 +1,11 @@
 use std::io::stdin;
+use std::collections::HashMap;
 
 fn gauss_sum(n: u64) -> u64 {
     n * (n + 1) / 2
 }
 
-fn find_subsets(sequence: Vec<u64>, dp: Vec<bool>, target_sum: u64) -> (Vec<u64>, Vec<u64>) {
+fn find_subsets(sequence: Vec<u64>, dp: HashMap<usize, bool>, target_sum: u64) -> (Vec<u64>, Vec<u64>) {
     // We know that it's technically possible to build a subset with the target sum.
     // We now need to find the two subsets of the `sequence` that sum to the target sum.
     let mut subset1: Vec<u64> = vec![];
@@ -24,7 +25,7 @@ fn find_subsets(sequence: Vec<u64>, dp: Vec<bool>, target_sum: u64) -> (Vec<u64>
         // this number (if we didn't do this we might end up adding a number from the 
         // sequence that results in a sequence with a sum that has no way of ever reaching
         // the `target_sum` with the remaining numbers found in the `sequence`).
-        if num <= remaining_sum && dp[(remaining_sum - num) as usize] {
+        if num <= remaining_sum && *dp.get(&(remaining_sum as usize - num as usize)).unwrap_or(&false) {
             remaining_sum -= num;
             subset1.push(num);
         } else {
@@ -59,15 +60,19 @@ fn dp_solution(n: u64) -> Option<(Vec<u64>, Vec<u64>)> {
     // formed from this previous `sum` plus the current `num` in the sequence, or 
     // (2) once we know it's possible to compute a sum and `dp[sum]` is marked `true`
     // then keeping this true boolean state.
-    let mut dp = vec![false; target_sum + 1];
-    dp[0] = true;
+    let mut dp: HashMap<usize, bool> = HashMap::new();
+    dp.insert(0, true);
     for num in sequence.iter().copied() {
         for sum in (num as usize..=target_sum).rev() {
-            dp[sum] = dp[sum] || dp[sum - num as usize];
+            if *dp.get(&sum).unwrap_or(&false) {
+                continue;
+            }
+
+            dp.insert(sum, *dp.get(&(sum - num as usize)).unwrap_or(&false));
         }
     }
 
-    if !dp[target_sum] {
+    if !dp.get(&target_sum).unwrap_or(&false) {
         return None;
     }
 
