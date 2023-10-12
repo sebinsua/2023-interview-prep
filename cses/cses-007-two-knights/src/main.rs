@@ -17,6 +17,18 @@ fn total_piece_configurations(n: u64) -> u64 {
     // because we don't consider the two pieces uniquely (e.g. both knights are
     // indistinguishable), we have to divide by 2 to get the correct number of
     // chess piece configurations.
+    //
+    // This is actually a more efficient way of computing the "binomial coefficient"
+    // (n choose k) for k = 2, which is normally written as:
+    //
+    // binomial(n, k) = factorial(n) / (factorial(k) * factorial(n - k))
+    //
+    // See: http://cses.fi/book/book.pdf#page=218
+    //
+    // If we wanted to compute the total number of chess piece configurations for
+    // k = 3, we would have to compute:
+    //
+    // (((n * n) - 0) * ((n * n) - 1) * ((n * n) - 2))) / (1 * 2 * 3)
     ((n * n) * ((n * n) - 1)) / 2
 }
 
@@ -51,6 +63,11 @@ fn attacking_knight_configurations(n: u64) -> u64 {
     // To be clear, the real equation is:
     // number_of_orientations_of_a_rectangle * (number_of_attacking_knight_positions_in_a_rectangle / factor_to_account_for_indistinguishable_knights) * number_of_ways_rectangles_can_be_placed
     // 2 * ((4 / 2) * ((n - 1) * (n - 2)))
+    //
+    // Note: if we needed to deal with k>=3 knights, the approach would have to get
+    //       significantly more complicated, as we would have to consider different
+    //       attack shapes and orientations, on top of the factor to account for
+    //       indistinguishable knights being updated to `k!`.
     4 * (n - 1) * (n - 2)
 }
 
