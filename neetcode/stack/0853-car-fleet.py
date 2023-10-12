@@ -3,26 +3,23 @@ from typing import List
 
 class Solution:
     def carFleet(self, target: int, positions: List[int], speeds: List[int]) -> int:
-        stack = []
-
-        cars = sorted(
-            (
-                (position, speed, (target - position) / speed)
-                for position, speed in zip(positions, speeds)
+        cars = [
+            (target - position) / speed
+            for position, speed in sorted(
+                (
+                    (position, speed)
+                    for position, speed in zip(positions, speeds)
+                    if speed != 0
+                ),
+                key=lambda x: x[0],
             )
-        )
+        ]
 
-        for position, speed, time_to_target in cars:
-            if speed == 0:
-                continue
+        fleet = []
+        for time_to_target in cars:
+            while fleet and fleet[-1] <= time_to_target:
+                fleet.pop()
 
-            while stack:
-                _, _, previous_time_to_target = stack[-1]
-                if previous_time_to_target <= time_to_target:
-                    stack.pop()
-                else:
-                    break
+            fleet.append(time_to_target)
 
-            stack.append((position, speed, time_to_target))
-
-        return len(stack)
+        return len(fleet)
